@@ -1,0 +1,40 @@
+@import url(//at.alicdn.com/t/c/font_4144790_7acys2jfz5g.css);
+@font-face {
+  font-family: "iconfont"; /* Project id 4144790 */
+  src: url('iconfont.woff2?t=1688350653012') format('woff2'),
+       url('iconfont.woff?t=1688350653012') format('woff'),
+       url('iconfont.ttf?t=1688350653012') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sousuo:before {
+  content: "\e752";
+}
+
+.icon-wode:before {
+  content: "\e606";
+}
+
+.icon-dianshiji:before {
+  content: "\e90a";
+}
+
+.icon-dianying:before {
+  content: "\e8ae";
+}
+
+.icon-dianyingpiao:before {
+  content: "\e8af";
+}
+
+.icon-shipin:before {
+  content: "\e63d";
+}
+
