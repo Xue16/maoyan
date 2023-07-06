@@ -2,38 +2,31 @@
   <main>
     <nav class="movie-nav">
       <ul>
-        <li>
+        <li @click="handleCityClick">
           天安门<b class="iconfont icon-jiantou_liebiaozhankai_o"></b>
         </li>
         <li>
-          <span class="active">热映</span>
-          <span>影院</span>
-          <span>待映</span>
-          <span>经典电影</span>
+          <router-link to="/home/movies/intheaters" tag="span" active-class="active">热映</router-link>
+          <router-link to="/home/movies/comingsoon" tag="span" active-class="active">影院</router-link>
+          <router-link to="/home/movies/comingsoon" tag="span" active-class="active">待映</router-link>
+          <router-link to="/home/movies/comingsoon" tag="span" active-class="active">经典电影</router-link>
         </li>
         <li>
           <b class="iconfont icon-sousuo"> </b>
         </li>
       </ul>
     </nav>
-    <div class="movie-list">
-      <MovieList :movie-list="movieList"></MovieList>
-    </div>
+    <router-view :movie-list="movieList"></router-view>
   </main>
 </template>
   
 <script>
-import axios from 'axios'
-import MovieList from '@/components/MovieList'
 export default {
   name: '',
   data() {
     return {
       movieList:[]
     }
-  },
-  components: {
-    MovieList,
   },
   async mounted() {
     let result = await this.$http.get({
@@ -43,9 +36,14 @@ export default {
         ci:292,
         channelId:4,
       }
-  })
-  console.log(result.data);
-  this.movieList = result.data
+    })
+    console.log(result.data);
+    this.movieList = result.data
+  },
+  methods: {
+    handleCityClick(){
+      this.$router.push('/citypicker')
+    }
   },
 }
 </script>

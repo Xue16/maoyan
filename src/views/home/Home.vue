@@ -11,52 +11,72 @@
           </li>
         </ul>
       </header>
-      <Movies></Movies>
+      <router-view></router-view>
       <nav class="tabbar">
-        <ul>
-          <li class="active">
-            <b class="iconfont icon-dianying "></b>
-            <span>电影/影院</span>
-          </li>
-          <li>
-            <b class="iconfont icon-shipin"></b>
-            <span>视频</span>
-          </li>
-          <li>
-            <b class="iconfont icon-dianshiji"></b>
-            <span>小视频</span>
-          </li>
-          <li>
-            <b class="iconfont icon-dianyingpiao"></b>
-            <span>演出</span>
-          </li>
-          <li>
-            <b class="iconfont icon-wode"></b>
-            <span>我的</span>
-          </li>
-        </ul>
+        <van-tabbar  v-model="active" active-color="#cd4c42" inactive-color="#666" route >
+        <van-tabbar-item >
+          <span>电影/影院</span>
+          <template #icon="props">
+            <van-icon class-prefix="iconfont icon-dianying" size=".26rem" />
+            <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
+          </template>
+        </van-tabbar-item>
+        <van-tabbar-item >
+          <span>视频</span>
+          <template #icon="props">
+            <van-icon class-prefix="iconfont icon-dianshiji" size=".26rem"/>
+            <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
+          </template>
+        </van-tabbar-item>
+        <van-tabbar-item >
+          <span>小视频</span>
+          <template #icon="props">
+            <van-icon class-prefix="iconfont icon-shipin" size=".26rem"/>
+            <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
+          </template>
+        </van-tabbar-item>
+        <van-tabbar-item >
+          <span>演出</span>
+          <template #icon="props">
+            <van-icon class-prefix="iconfont icon-dianyingpiao" size=".26rem"/>
+            <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
+          </template>
+        </van-tabbar-item>
+        <van-tabbar-item >
+          <span>我的</span>
+          <template #icon="props">
+            <van-icon class-prefix="iconfont icon-wode" size=".26rem"/>
+            <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
+          </template>
+        </van-tabbar-item>
+        </van-tabbar>
       </nav>
     </div>
   </template>
   
   <script>
+  import Vue from 'vue'
+  import { Tabbar, TabbarItem, Icon } from 'vant';
   import Movies from '@/views/home/movies/Movies.vue'
+  Vue.use(Tabbar).use(TabbarItem).use(Icon)
   export default {
     name: '',
     data() {
       return {
-
+        active:0
       }
     },
     components: {
       Movies,
-    }
+    },
   }
   
   </script>
   <style lang="stylus" scoped>
   @import '@/assets/iconfont/iconfont.css';
   @import '@/assets/stylus/border.styl';
+  [class-perfix]
+    size: 3rem
   .home-wrap
     display: flex
     flex-direction: column
@@ -79,9 +99,12 @@
             margin-right .1rem
     .tabbar
       height .5rem
-      border1px() 
       ul
+        border1px() 
         display flex
+        position fixed
+        bottom 0
+        width 100%
         li 
           flex 1
           display flex
@@ -100,4 +123,5 @@
             transform scale(0.9)
           &.active
             color #cd4c42
+
   </style>

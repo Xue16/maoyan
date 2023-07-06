@@ -9,8 +9,9 @@
   "dependencies": {
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
+    "vant": "^2.12.54",
     "vue": "^2.6.14",
-    "vue-router": "^3.5.1",
+    "vue-router": "^3.6.5",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "postcss-loader": "^3.0.0",
     "stylus": "^0.55.0",
     "stylus-loader": "^6.2.0",
+    "unplugin-vue-components": "^0.25.1",
     "vue-template-compiler": "^2.6.14"
   }
 }
