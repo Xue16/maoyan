@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <li v-for="(mv) in movieList.hot">
+      <li v-for="(mv) in movieList">
         <div>
           <img :src="mv.img" alt="mv.nm">
         </div>

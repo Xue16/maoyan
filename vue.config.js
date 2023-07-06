@@ -15,7 +15,11 @@ module.exports = defineConfig({
       },
       '/api':{
         target:"https://i.maoyan.com",
-        changeOrigin: true
+        changeOrigin: true,
+      },
+      '/ajax':{
+        target:"https://i.maoyan.com",
+        changeOrigin: true,
       }
     }
   },

@@ -42,7 +42,7 @@
             <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
           </template>
         </van-tabbar-item>
-        <van-tabbar-item >
+        <van-tabbar-item  >
           <span>我的</span>
           <template #icon="props">
             <van-icon class-prefix="iconfont icon-wode" size=".26rem"/>

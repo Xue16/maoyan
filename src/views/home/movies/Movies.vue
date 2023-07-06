@@ -16,34 +16,94 @@
         </li>
       </ul>
     </nav>
-    <router-view :movie-list="movieList"></router-view>
+    <section class="movie-list">
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+        <van-list v-model ="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
+          <router-view :movie-list="movieList"></router-view>
+
+        </van-list>
+      </van-pull-refresh>
+    </section>
   </main>
 </template>
   
 <script>
+import Vue from 'vue';
+import { List } from 'vant';
+Vue.use(List)
 export default {
   name: '',
   data() {
     return {
-      movieList:[]
+      movieList: [],
+      finished: false,//控制加载状态 数据全部加载完毕
+      loading: false,//控制加载状态 数据更新
+      refreshing: false,
+      maxLength:0,
+      movieIds:[]
     }
   },
-  async mounted() {
-    let result = await this.$http.get({
-      url:'/api/mmdb/movie/v3/list/hot.json',
-      params:{
-        ct:'重庆',
-        ci:292,
-        channelId:4,
-      }
-    })
-    console.log(result.data);
-    this.movieList = result.data
+  created(){
+    this.hasMore = false
+  },
+  mounted() {
+    this.hasMore = this._initMovieData();
   },
   methods: {
-    handleCityClick(){
+    async _initMovieData() {
+      let result = await this.$http.get({
+        url: '/api/mmdb/movie/v3/list/hot.json',
+        params: {
+          ct: '重庆',
+          ci: 292,
+          channelId: 4,
+        }
+      })
+      // .then((response)=>{
+      //   this.movieList = response.data
+      //   console.log(response.data);
+      // })
+      this.movieList = result.data.hot
+      this.maxLength = result.data.movieIds.maxLength
+      this.movieIds = result.data.movieIds.splice(0,10)
+      return result.data ? true: false
+    },
+    async moreMovieData() {
+      let sendmovieIds = this.movieIds.splice(0,10)
+      let sendmovieIds1 = sendmovieIds.join(',')
+      console.log(sendmovieIds.join(',').toString());
+      let result = await this.$http.get({
+        url: '/ajax/moreComingList',
+        params: {
+          token:'',
+          optimus_uuid:'',
+          optimus_risk_level:71,
+          optimus_code:10,
+          movieIds:''
+        }
+      })
+      
+      // .then((response)=>{
+      //   this.movieList = response.data
+      //   console.log(response.data);
+      // })
+    },
+    handleCityClick() {
       this.$router.push('/citypicker')
-    }
+    },
+    async onRefresh() {
+      let refreshData =await this._initMovieData()
+      if(refreshData){
+        this.refreshing = false
+      }
+    },
+    async onLoad() {
+      
+      await this.moreMovieData()
+      // this.loading = false;
+      // this.finished = true
+    },
+
   },
 }
 </script>
