@@ -1,7 +1,7 @@
 <template>
   <span >
     <span class="version" :class="version"></span>
-    <span class="pre-show" v-if="preSale=== 1 && recentShowNum !== 0"></span>
+    <span class="pre-show" v-if="preShow===false"></span>
   </span>  
 </template>
   
@@ -12,13 +12,17 @@ export default {
       type:String,
       required:true,
     },
-    preSale:{
-      type:Number,
-      required:true
-    },
-    recentShowNum:{
-      type:Number,
-      required:true
+    // preSale:{
+    //   type:Number,
+    //   required:true
+    // },
+    // recentShowNum:{
+    //   type:Number,
+    //   required:true
+    // },
+    preShow:{
+      type:Boolean,
+      required : true
     }
   },
   data() {

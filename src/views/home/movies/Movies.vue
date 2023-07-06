@@ -40,11 +40,12 @@ export default {
       loading: false,//控制加载状态 数据更新
       refreshing: false,
       maxLength:0,
-      movieIds:[]
+      movieIds:[],
     }
   },
   created(){
-    this.hasMore = false
+    this.hasMore = false,
+    this.ct = '重庆'
   },
   mounted() {
     this.hasMore = this._initMovieData();
@@ -54,8 +55,8 @@ export default {
       let result = await this.$http.get({
         url: '/api/mmdb/movie/v3/list/hot.json',
         params: {
-          ct: '重庆',
-          ci: 292,
+          ct: '北京',
+          ci: 1,
           channelId: 4,
         }
       })
@@ -64,29 +65,33 @@ export default {
       //   console.log(response.data);
       // })
       this.movieList = result.data.hot
-      this.maxLength = result.data.movieIds.maxLength
-      this.movieIds = result.data.movieIds.splice(0,10)
+      this.maxLength = result.data.total
+      this.movieIds = result.data.movieIds
+      this.movieIds.splice(0,12)
       return result.data ? true: false
     },
+
     async moreMovieData() {
       let sendmovieIds = this.movieIds.splice(0,10)
       let sendmovieIds1 = sendmovieIds.join(',')
-      console.log(sendmovieIds.join(',').toString());
       let result = await this.$http.get({
         url: '/ajax/moreComingList',
         params: {
           token:'',
-          optimus_uuid:'',
+          movieIds:sendmovieIds1,
+          optimus_uuid:'65DA1AF0166311EEB1B283CBF15CD35ED5EE520EE27748A2B436587D49F17A12',
           optimus_risk_level:71,
           optimus_code:10,
-          movieIds:''
         }
       })
-      
-      // .then((response)=>{
-      //   this.movieList = response.data
-      //   console.log(response.data);
-      // })
+      // console.log(result);
+      // if(!result.error){
+      //   this.movieList = [
+      //     ...this.movieList,
+      //     ...result.coming
+      //   ]
+      // }
+      // console.log(this.movieList);
     },
     handleCityClick() {
       this.$router.push('/citypicker')
@@ -100,8 +105,11 @@ export default {
     async onLoad() {
       
       await this.moreMovieData()
-      // this.loading = false;
-      // this.finished = true
+      this.loading = false;
+      this.movieList.length = this.maxLength
+      if(this.movieList.length=== this.maxLength){
+        this.finished = true
+      }
     },
 
   },

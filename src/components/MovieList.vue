@@ -3,13 +3,12 @@
     <ul>
       <li v-for="(mv) in movieList">
         <div>
-          <img :src="mv.img" alt="mv.nm">
+          <img :src="mv.img " alt="mv.nm">
         </div>
         <div >
           <div class="movie-title">
             <h1>{{ mv.nm }}</h1>
-            <MovieVersion :ver=mv.ver :preSale="mv.preSale" :recentShowNum =" mv.recentShowNum"/>
-          
+            <MovieVersion :ver=mv.ver :preShow="mv.preShow"/>
           </div>
           <div class="detail">
             <div class="purfix">
