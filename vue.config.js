@@ -8,6 +8,8 @@ module.exports = defineConfig({
       .set('@', path.join(__dirname, './src'))
   },
   devServer:{
+    // host:'10.16.81.232',
+    // port:8080,
     proxy:{
       '/mmdb/movie/v2': {
         target: 'https://wx.maoyan.com',
@@ -16,10 +18,12 @@ module.exports = defineConfig({
       '/api':{
         target:"https://i.maoyan.com",
         changeOrigin: true,
+        // secure: false, 
       },
       '/ajax':{
         target:"https://i.maoyan.com",
         changeOrigin: true,
+        // secure: false, 
       }
     }
   },

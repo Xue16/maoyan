@@ -7,15 +7,15 @@
         </div>
         <div >
           <div class="movie-title">
-            <h1>{{ mv.nm }}</h1>
-            <MovieVersion :ver=mv.ver :preShow="mv.preShow"/>
+            <h1 class="movie-nm">{{ mv.nm }}</h1>
+            <MovieVersion  :ver=mv.ver :version1="mv.version" :preShow="mv.preShow"/>
           </div>
           <div class="detail">
             <div class="purfix">
             <div class="score-purfix" v-if="mv.sc !== 0">
-              <span v-if="mv.scoreLabel === '猫眼购票评分'">观众评 </span>
-              <span v-else-if="mv.scoreLabel === '猫眼点映评分'">点映评 </span>
+              <span v-if="mv.scoreLabel === '猫眼点映评分'">点映评 </span>
               <span v-else-if="mv.scoreLabel === '暂无评分'">暂无评分 </span>
+              <span v-else>观众评 </span>
               <span class="grade">{{ mv.sc }}</span>
             </div>
             <div class="wish-purfix" v-else>
@@ -24,9 +24,7 @@
             </div>
           </div>
           </div>
-          
-
-          <p class="actor">{{ mv.desc }}</p>
+          <p class="actor">主演:{{mv.star }}</p>
           <div>{{ mv.showInfo }}</div>
         </div>
         <MovieButton :showStateButton=mv.showStateButton />
@@ -73,13 +71,16 @@
         color: #666
         .movie-title
           display flex
-          h1
-            display flex
+          .movie-nm
             align-items center
             font-size .17rem
             font-weight 700
             color: #333
             padding-right: .05rem
+            display: inline-block;
+            // white-space: nowrap;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
             display -webkit-box
             -webkit-line-clamp 1
             -webkit-box-orient vertical

@@ -16,7 +16,17 @@
         </li>
       </ul>
     </nav>
+    
     <section class="movie-list">
+      <van-skeleton 
+        v-for="i in 7"
+        :key="'a'+i"
+        class="skeleton"
+        :loading="showSkeleton"
+        title 
+        avatar 
+        avatar-shape="square" 
+        avatar-size="60"  :row="2" ></van-skeleton>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <van-list v-model ="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
           <router-view :movie-list="movieList"></router-view>
@@ -29,8 +39,8 @@
   
 <script>
 import Vue from 'vue';
-import { List } from 'vant';
-Vue.use(List)
+import { List,Skeleton} from 'vant';
+Vue.use(List).use(Skeleton)
 export default {
   name: '',
   data() {
@@ -41,6 +51,7 @@ export default {
       refreshing: false,
       maxLength:0,
       movieIds:[],
+      showSkeleton: true,
     }
   },
   created(){
@@ -49,6 +60,7 @@ export default {
   },
   mounted() {
     this.hasMore = this._initMovieData();
+    this.showSkeleton = false
   },
   methods: {
     async _initMovieData() {
@@ -84,29 +96,30 @@ export default {
           optimus_code:10,
         }
       })
-      // console.log(result);
-      // if(!result.error){
-      //   this.movieList = [
-      //     ...this.movieList,
-      //     ...result.coming
-      //   ]
-      // }
-      // console.log(this.movieList);
+      if(!result.error){
+        this.movieList = [
+          ...this.movieList,
+          ...result.coming
+        ]
+      }
     },
     handleCityClick() {
       this.$router.push('/citypicker')
     },
     async onRefresh() {
+      this.showSkeleton = true
+      this.movieList = []
+      this.finished = false
       let refreshData =await this._initMovieData()
+
       if(refreshData){
         this.refreshing = false
       }
+      this.showSkeleton = false
     },
     async onLoad() {
-      
       await this.moreMovieData()
       this.loading = false;
-      this.movieList.length = this.maxLength
       if(this.movieList.length=== this.maxLength){
         this.finished = true
       }
@@ -167,4 +180,6 @@ export default {
     .movie-list
       flex: 1
       overflow-y: scroll
+      .skeleton
+        margin-top .2rem
   </style>

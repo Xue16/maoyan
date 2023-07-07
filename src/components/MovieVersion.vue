@@ -1,8 +1,8 @@
 <template>
-  <span >
-    <span class="version" :class="version"></span>
-    <span class="pre-show" v-if="preShow===false"></span>
-  </span>  
+  <div class="version-span">
+    <span class="version" v-if="versionshow===true" :class="version"></span>
+    <span class="pre-show" v-if="preShow===true"></span>
+  </div>  
 </template>
   
 <script>
@@ -10,7 +10,11 @@ export default {
   props:{
     ver:{
       type:String,
-      required:true,
+      default: ''
+    },
+    version1:{
+      type:String,
+      default: ''
     },
     // preSale:{
     //   type:Number,
@@ -22,11 +26,12 @@ export default {
     // },
     preShow:{
       type:Boolean,
-      required : true
+      required : false,
     }
   },
   data() {
     return {
+      versionshow: true
     }
   },
 
@@ -35,13 +40,26 @@ export default {
       let arr = []
       let reg1 = new RegExp('(3D|2D)', 'gi')
       let reg2 = new RegExp('(IMAX)', 'gi')
-      let r1 = reg1.exec(this.ver)
-      let r2 = reg2.exec(this.ver)
+      let r1,r2
+      if(this.version1!==''){
+        r1 = reg1.exec(this.version1)
+        r2 = reg2.exec(this.version1)
+      }else{
+        r1 = reg1.exec(this.ver)
+        r2 = reg2.exec(this.ver)
+      }
+      
       if (r1) {
         arr.push('v' + r1[0].toLowerCase())
       }
       if (r2) {
         arr.push('imax')
+      }
+      if(arr.indexOf('imax') !== -1 || arr.indexOf('3d') !== -1){
+        this.versionshow = true
+      }else{
+        this.versionshow = false
+        
       }
       return arr.join(' ')
     }
@@ -50,6 +68,10 @@ export default {
 </script>
   
   <style lang='stylus' scoped>
+  .version-span{
+    display: flex;
+    flex-direction: row
+  }
   .pre-show,
   .version {
     background-size: contain;
