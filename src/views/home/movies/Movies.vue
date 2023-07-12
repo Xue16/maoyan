@@ -3,13 +3,13 @@
     <nav class="movie-nav">
       <ul>
         <li @click="handleCityClick">
-          天安门<b class="iconfont icon-jiantou_liebiaozhankai_o"></b>
+          {{city.name}}<b class="iconfont icon-jiantou_liebiaozhankai_o"></b>
         </li>
         <li>
           <router-link to="/home/movies/intheaters" tag="span" active-class="active">热映</router-link>
-          <router-link to="/home/movies/comingsoon" tag="span" active-class="active">影院</router-link>
+          <router-link to="/home/movies/theaters" tag="span" active-class="active">影院</router-link>
           <router-link to="/home/movies/comingsoon" tag="span" active-class="active">待映</router-link>
-          <router-link to="/home/movies/comingsoon" tag="span" active-class="active">经典电影</router-link>
+          <router-link to="/home/movies/clasicmovie" tag="span" active-class="active">经典电影</router-link>
         </li>
         <li>
           <b class="iconfont icon-sousuo"> </b>
@@ -17,7 +17,7 @@
       </ul>
     </nav>
     
-    <section class="movie-list">
+    <section class="movie-list" v-if="this.$route.name ==='intheaters' ">
       <van-skeleton 
         v-for="i in 7"
         :key="'a'+i"
@@ -29,10 +29,26 @@
         avatar-size="60"  :row="2" ></van-skeleton>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <van-list v-model ="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
+          <div class="top-rated" data-view-bid="b_movie_bt66pvrm_mv">
+            <p class="title">最受好评电影</p>
+            <div class="top-rated-list view-scroll-x-container">
+		          <div class="top-rated-item" v-for="(expact ,index) in popularData " :key="index" :data-id=expact.id data-view-bid="b_movie_xl4zo6n0_mv" data-bid="b_movie_xl4zo6n0_mc"
+		      	    :data-lab='{ "movie_id": expact.id }' >
+		      	    <div class="poster default-img-bg">
+		      	    	<img :src=expact.img  onerror="this.style.visibility='hidden'">
+		      	    	<span class="wish-bg"></span>
+		      	    	<span class="wish"><span class="wish-num">{{ expact.wish}}</span>人想看</span>
+		      	    </div>
+		      	    <h5 class="name line-ellipsis">{{expact.nm}}</h5>
+		          </div>
+	        </div>
+          </div>
           <router-view :movie-list="movieList"></router-view>
-
         </van-list>
       </van-pull-refresh>
+    </section>
+    <section class="movie-list" v-else>
+      <router-view></router-view>
     </section>
   </main>
 </template>
@@ -40,6 +56,7 @@
 <script>
 import Vue from 'vue';
 import { List,Skeleton} from 'vant';
+import {mapState} from 'vuex'
 Vue.use(List).use(Skeleton)
 export default {
   name: '',
@@ -52,56 +69,68 @@ export default {
       maxLength:0,
       movieIds:[],
       showSkeleton: true,
+      url:"/api/mmdb/movie/v3/list/hot.json",
+      groupedData:{},
+      popularData:[]
     }
   },
   created(){
-    this.hasMore = false,
-    this.ct = '重庆'
+    this.hasMore = false
+    this.limit = 10
   },
-  mounted() {
-    this.hasMore = this._initMovieData();
-    this.showSkeleton = false
+  async mounted() {
+    if(this.$route.name ==="intheaters" ){
+      await this._initMovieData();
+      this.showSkeleton = false
+    }
+  },
+  computed:{
+    ...mapState(['city'])
   },
   methods: {
     async _initMovieData() {
-      let result = await this.$http.get({
-        url: '/api/mmdb/movie/v3/list/hot.json',
+      let result,return_data=false ;
+      this.movieIds = []
+      this.movieList={}
+      this.maxLength = 0
+      if(this.$route.name ==="intheaters"){
+        result = await this.$http.get({
+        url: "/api/mmdb/movie/v3/list/hot.json",
         params: {
-          ct: '北京',
-          ci: 1,
-          channelId: 4,
-        }
-      })
-      // .then((response)=>{
-      //   this.movieList = response.data
-      //   console.log(response.data);
-      // })
-      this.movieList = result.data.hot
-      this.maxLength = result.data.total
-      this.movieIds = result.data.movieIds
-      this.movieIds.splice(0,12)
-      return result.data ? true: false
+          ct: this.city.name,
+          ci: this.city.id,
+          channelId: 4,}
+        })
+        this.movieList = result.data.hot
+        return_data = true
+        this.maxLength = result.data.total
+        this.movieIds = result.data.movieIds
+        this.movieIds.splice(0,12)
+
+        this.popularData = this.movieList
+        this.popularData.sort((a,b)=>b.sc-a.sc)
+      }
+      return return_data
     },
 
     async moreMovieData() {
       let sendmovieIds = this.movieIds.splice(0,10)
       let sendmovieIds1 = sendmovieIds.join(',')
-      let result = await this.$http.get({
-        url: '/ajax/moreComingList',
-        params: {
+      let params= {
           token:'',
           movieIds:sendmovieIds1,
-          optimus_uuid:'65DA1AF0166311EEB1B283CBF15CD35ED5EE520EE27748A2B436587D49F17A12',
+          optimus_uuid:'',
           optimus_risk_level:71,
           optimus_code:10,
-        }
-      })
-      if(!result.error){
-        this.movieList = [
-          ...this.movieList,
-          ...result.coming
-        ]
       }
+      let result = await this.$http.get({
+        url: '/ajax/moreComingList',
+        params: params
+      })
+      this.movieList = [
+        ...this.movieList,
+        ...result.coming
+      ]
     },
     handleCityClick() {
       this.$router.push('/citypicker')
@@ -110,7 +139,8 @@ export default {
       this.showSkeleton = true
       this.movieList = []
       this.finished = false
-      let refreshData =await this._initMovieData()
+      let refreshData =[]
+      refreshData = await this._initMovieData()
 
       if(refreshData){
         this.refreshing = false
@@ -124,8 +154,23 @@ export default {
         this.finished = true
       }
     },
-
   },
+  watch:{
+      // $route:{
+      //   handler(route){
+      //     if(route.name === 'intheaters' || route.name === 'comingsoon'){
+      //       if(route.name === 'intheaters'){
+      //         this.url = "/api/mmdb/movie/v3/list/hot.json"
+      //       }else if(route.name === 'comingsoon'){
+      //         this.url = '/ajax/comingList'
+      //       }
+      //       this.refreshing = true
+      //       this.onRefresh()
+      //     }
+          
+      //   }
+      // }
+    }
 }
 </script>
 <style lang="stylus" scoped>

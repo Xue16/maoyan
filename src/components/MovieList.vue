@@ -25,7 +25,8 @@
           </div>
           </div>
           <p class="actor">主演:{{mv.star }}</p>
-          <div>{{ mv.showInfo }}</div>
+          <div v-if="$route.name ==='intheaters'">{{ mv.showInfo }}</div>
+          <div v-else-if="$route.name ==='comingsoon'">{{ mv.rt}} 上映</div>
         </div>
         <MovieButton :showStateButton=mv.showStateButton />
       </li>
@@ -39,7 +40,8 @@
   export default {
     name: '',
     props:{
-      movieList:[]
+      movieList:[],
+      groupmovieList:[]
     },
     components: {
       MovieButton,

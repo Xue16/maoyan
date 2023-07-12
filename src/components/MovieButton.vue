@@ -8,7 +8,16 @@
   export default {
     name: 'aaa',
     props: {
-      showStateButton:{}
+      showStateButton:{
+        type:Object,
+        default:function(){
+          return{
+          color: "#faaf00",
+          content: "想看",
+          onlyPreShow: false
+        }
+        }
+      }
     },
     computed:{
       buttoncolor(){

@@ -14,35 +14,35 @@
       <router-view></router-view>
       <nav class="tabbar">
         <van-tabbar  v-model="active" active-color="#cd4c42" inactive-color="#666" route >
-        <van-tabbar-item >
+        <van-tabbar-item  to="/home/movies">
           <span>电影/影院</span>
           <template #icon="props">
             <van-icon class-prefix="iconfont icon-dianying" size=".26rem" />
             <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
           </template>
         </van-tabbar-item>
-        <van-tabbar-item >
+        <van-tabbar-item to="/home/video">
           <span>视频</span>
           <template #icon="props">
             <van-icon class-prefix="iconfont icon-dianshiji" size=".26rem"/>
             <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
           </template>
         </van-tabbar-item>
-        <van-tabbar-item >
+        <van-tabbar-item to="/home/minivideo">
           <span>小视频</span>
           <template #icon="props">
             <van-icon class-prefix="iconfont icon-shipin" size=".26rem"/>
             <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
           </template>
         </van-tabbar-item>
-        <van-tabbar-item >
+        <van-tabbar-item to="/home/perform">
           <span>演出</span>
           <template #icon="props">
             <van-icon class-prefix="iconfont icon-dianyingpiao" size=".26rem"/>
             <!-- <img :src="props.active ? icon.active : icon.inactive" /> -->
           </template>
         </van-tabbar-item>
-        <van-tabbar-item  >
+        <van-tabbar-item to="/home/profile" >
           <span>我的</span>
           <template #icon="props">
             <van-icon class-prefix="iconfont icon-wode" size=".26rem"/>
