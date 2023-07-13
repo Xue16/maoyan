@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "start": "nodemon"
   },
   "dependencies": {
     "animate.css": "^4.1.1",
@@ -21,6 +22,7 @@
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "css-loader": "^3.5.3",
+    "nodemon": "^3.0.1",
     "postcss-loader": "^3.0.0",
     "stylus": "^0.55.0",
     "stylus-loader": "^6.2.0",
